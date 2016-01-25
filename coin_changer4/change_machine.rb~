@@ -1,0 +1,14 @@
+class ChangeMachine
+	def make_change(money)
+		change = []
+		[25, 10, 5, 1].each do |coin|
+			change << get_coins(money, coin)
+			money %= coin
+		end
+		change
+	end	
+
+	def get_coins(money, coin)
+		[coin] * (money/coin)
+	end
+end
