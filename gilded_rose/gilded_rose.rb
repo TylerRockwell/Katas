@@ -11,8 +11,7 @@ end
 
 def daily_adjustment(item)
   change = 0
-  change += degrading_item?(item) ? -1 : 1
-  change += backstage_passes_modifier(item)
+  change += degrading_item?(item) ? -1 : 1 + backstage_passes_modifier(item)
   change *= conjured_item_modifier(item)
   change
 end
@@ -54,8 +53,8 @@ end
 def expired_item_modifier(item)
   if expired?(item)
     return -50 if backstage_passes?(item)
-    mod = better_with_age?(item) ?  1 : -1
-    return mod * conjured_item_modifier(item)
+    modifier = better_with_age?(item) ?  1 : -1
+    return modifier * conjured_item_modifier(item)
   end
   0
 end
