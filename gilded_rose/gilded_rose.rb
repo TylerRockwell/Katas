@@ -16,13 +16,22 @@ def daily_adjustment(item)
   change
 end
 
+def decrease_time_remaining(item)
+  item.sell_in -= 1
+end
+
+def expired_item_modifier(item)
+  if expired?(item)
+    return -50 if backstage_passes?(item)
+    modifier = better_with_age?(item) ?  1 : -1
+    return modifier * conjured_item_modifier(item)
+  end
+  0
+end
+
 def apply_quality_caps(item)
   item.quality = 50 if item.quality > 50
   item.quality = 0 if item.quality < 0
-end
-
-def legendary_item?(item)
-  item.name == 'Sulfuras, Hand of Ragnaros'
 end
 
 def degrading_item?(item)
@@ -37,30 +46,21 @@ def conjured_item?(item)
   item.name.include?("Conjured")
 end
 
-def conjured_item_modifier(item)
-  return 2 if conjured_item?(item)
-  1
-end
-
-def decrease_time_remaining(item)
-  item.sell_in -= 1
+def legendary_item?(item)
+  item.name == 'Sulfuras, Hand of Ragnaros'
 end
 
 def expired?(item)
   item.sell_in < 0
 end
 
-def expired_item_modifier(item)
-  if expired?(item)
-    return -50 if backstage_passes?(item)
-    modifier = better_with_age?(item) ?  1 : -1
-    return modifier * conjured_item_modifier(item)
-  end
-  0
-end
-
 def backstage_passes?(item)
   item.name == 'Backstage passes to a TAFKAL80ETC concert'
+end
+
+def conjured_item_modifier(item)
+  return 2 if conjured_item?(item)
+  1
 end
 
 def backstage_passes_modifier(item)

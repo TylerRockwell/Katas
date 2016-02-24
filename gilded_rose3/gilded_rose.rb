@@ -19,6 +19,10 @@ def daily_quality_adjustment(item)
   end
 end
 
+def decrease_days_left(item)
+  item.sell_in -= 1
+end
+
 def update_expired(item)
   apply_expired_adjustment(item) if expired?(item)
 end
@@ -32,17 +36,17 @@ def apply_expired_adjustment(item)
   trash(item) if time_sensitive?(item)
 end
 
+def apply_quality_cap(item)
+  item.quality = MAX_QUALITY if above_max_quality?(item)
+  item.quality = MIN_QUALITY if below_min_quality?(item)
+end
+
 def increase_quality(item, amount=1)
   item.quality += amount
 end
 
 def decrease_quality(item, amount=1)
   item.quality -= amount
-end
-
-def apply_quality_cap(item)
-  item.quality = MAX_QUALITY if above_max_quality?(item)
-  item.quality = MIN_QUALITY if below_min_quality?(item)
 end
 
 def improve_item(item)
@@ -64,30 +68,6 @@ def below_min_quality?(item)
   item.quality < MIN_QUALITY
 end
 
-def decrease_days_left(item)
-  item.sell_in -= 1
-end
-
-def legendary_item?(item)
-  item.name == 'Sulfuras, Hand of Ragnaros'
-end
-
-def conjured_item?(item)
-  item.name.include?("Conjured")
-end
-
-def expired?(item)
-  item.sell_in < 0
-end
-
-def better_with_age?(item)
-  item.name == 'Aged Brie'
-end
-
-def time_sensitive?(item)
-  item.name == 'Backstage passes to a TAFKAL80ETC concert'
-end
-
 def anticipation_bonus(item)
   amount = 0
   amount += 1 if item.sell_in < 11
@@ -97,6 +77,26 @@ end
 
 def trash(item)
   item.quality = 0
+end
+
+def better_with_age?(item)
+  item.name == 'Aged Brie'
+end
+
+def conjured_item?(item)
+  item.name.include?("Conjured")
+end
+
+def legendary_item?(item)
+  item.name == 'Sulfuras, Hand of Ragnaros'
+end
+
+def expired?(item)
+  item.sell_in < 0
+end
+
+def time_sensitive?(item)
+  item.name == 'Backstage passes to a TAFKAL80ETC concert'
 end
 # DO NOT CHANGE THINGS BELOW -----------------------------------------
 
